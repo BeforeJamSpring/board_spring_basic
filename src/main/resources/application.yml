@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: boards
+# ??? ??? ?? yml
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:boards;MODE=MySQL
+    username: sa
+    password:
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console # http://localhost:8080/h2-console ? ?? h2DB ??
+  sql:
+    init:
+      mode: always
+
+# mybatis ??
+mybatis:
+  mapper-locations: classpath:mapper/**/*xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+# logging level ??
+logging:
+  level:
+    com.beforejam.boards: debug
