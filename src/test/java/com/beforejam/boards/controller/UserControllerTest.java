@@ -73,7 +73,7 @@ class UserControllerTest {
         User user = TestUserUtil.createTestUser();
 
         // when
-        given(userService.getUser("TESER")).willReturn(user);
+        given(userService.getUser("TESTER")).willReturn(user);
 
         // then
         mockMvc.perform(get("/users/{username}" ,"TESTER")
