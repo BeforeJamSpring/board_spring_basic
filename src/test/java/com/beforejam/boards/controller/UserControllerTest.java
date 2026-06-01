@@ -5,7 +5,6 @@ import com.beforejam.boards.service.UserService;
 import com.beforejam.boards.util.TestUserUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -14,7 +13,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //웹 레이어만 쏙 잘라서 테스트하는 가벼운 환경 설정
@@ -44,5 +45,22 @@ class UserControllerTest {
         // then
         mockMvc.perform(post("/users/signup").contentType(MediaType.APPLICATION_JSON)
                 .content(om.writeValueAsString(user))).andExpect(status().isCreated());
+    }
+
+    @Test
+    void signupDuplicateUserTest() throws Exception {
+        // given
+        User user = TestUserUtil.createTestUser();
+
+        // when
+        doThrow(new IllegalArgumentException("이미 존재하는 아이디입니다."))
+                .when(userService)
+                .signUp(user);
+        // then
+        mockMvc.perform(post("/users/signup")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(om.writeValueAsString(user)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("이미 존재하는 아이디입니다."));
     }
 }
