@@ -23,6 +23,6 @@ public class UserService {
     }
 
     public User getUser(String username){
-        return null;
+        return userMapper.findByUsername(username);
     }
 }

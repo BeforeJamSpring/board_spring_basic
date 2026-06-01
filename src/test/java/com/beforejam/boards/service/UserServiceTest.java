@@ -9,7 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.*;
@@ -60,6 +59,6 @@ class UserServiceTest {
         // then
         assertThat(found).isNotNull();
         assertThat(found.getUsername()).isEqualTo("TESTER");
-        assertThat(found.getName()).isEqualTo("TESTER");
+        assertThat(found.getName()).isEqualTo("테스터");
     }
 }
