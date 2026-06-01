@@ -5,6 +5,7 @@ import com.beforejam.boards.service.UserService;
 import com.beforejam.boards.util.TestUserUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -12,9 +13,10 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.BDDMockito.*;
+import static org.mockito.Mockito.*;
+import static org.springframework.http.MediaType.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -43,7 +45,7 @@ class UserControllerTest {
         doNothing().when(userService).signUp(any(User.class));
 
         // then
-        mockMvc.perform(post("/users/signup").contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(post("/users/signup").contentType(APPLICATION_JSON)
                 .content(om.writeValueAsString(user))).andExpect(status().isCreated());
     }
 
@@ -59,9 +61,25 @@ class UserControllerTest {
                 .signUp(any(User.class));
         // then
         mockMvc.perform(post("/users/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(APPLICATION_JSON)
                         .content(om.writeValueAsString(user))) // @RequestBody는 새로운 User 객체를 만들어 냄
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("이미 존재하는 아이디입니다."));
+    }
+
+    @Test
+    void getUserSuccessTest() throws Exception {
+        // given
+        User user = TestUserUtil.createTestUser();
+
+        // when
+        given(userService.getUser("TESER")).willReturn(user);
+
+        // then
+        mockMvc.perform(get("/users/{username}" ,"TESTER")
+                        .accept(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("TESTER"))
+                .andExpect(jsonPath("$.name").value("테스터"));
     }
 }
