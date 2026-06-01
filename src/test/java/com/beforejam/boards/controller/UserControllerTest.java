@@ -55,11 +55,12 @@ class UserControllerTest {
         // when
         doThrow(new IllegalArgumentException("이미 존재하는 아이디입니다."))
                 .when(userService)
-                .signUp(user);
+                //기존 메모리 주소가 같은 user가 들어 왔을 때 예외처리를 시도
+                .signUp(any(User.class));
         // then
         mockMvc.perform(post("/users/signup")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(om.writeValueAsString(user)))
+                        .content(om.writeValueAsString(user))) // @RequestBody는 새로운 User 객체를 만들어 냄
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.message").value("이미 존재하는 아이디입니다."));
     }
