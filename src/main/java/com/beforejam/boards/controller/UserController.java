@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.springframework.http.HttpStatus.CREATED;
+
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -17,6 +19,9 @@ public class UserController {
 
     @PostMapping("/signup")
     public ResponseEntity<Void> signup(@RequestBody User user){
-        return null;
+        System.out.println("Controller 진입");
+        userService.signUp(user);
+
+        return ResponseEntity.status(CREATED).build();
     }
 }

@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //웹 레이어만 쏙 잘라서 테스트하는 가벼운 환경 설정
-@WebMvcTest(UserControllerTest.class)
+@WebMvcTest(UserController.class)
 class UserControllerTest {
 
     // 가짜로 HTTP 요청을 던져주는 테스트 전용 가상 브라우저 로봇
