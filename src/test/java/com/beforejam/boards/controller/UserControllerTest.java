@@ -2,6 +2,7 @@ package com.beforejam.boards.controller;
 
 import com.beforejam.boards.domain.User;
 import com.beforejam.boards.service.UserService;
+import com.beforejam.boards.util.TestUserUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -35,12 +36,7 @@ class UserControllerTest {
     @Test
     void signupSuccessTest() throws Exception {
         // given
-        User user = User.builder().username("controllerUSer")
-                .password("1234")
-                .email("Test@Test.com")
-                .name("Test")
-                .build();
-
+        User user = TestUserUtil.createTestUser();
         // when
         //doNothing(): 반환 타입이 void인 메서드의 가짜 행위를 정의할 때 사용
         doNothing().when(userService).signUp(any(User.class));

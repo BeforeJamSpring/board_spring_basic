@@ -1,6 +1,7 @@
 package com.beforejam.boards.mapper;
 
 import com.beforejam.boards.domain.User;
+import com.beforejam.boards.util.TestUserUtil;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +19,14 @@ class UserMapperTest {
     @Test
     void saveUserTest() throws Exception {
         // given
-        User user = User.builder().username("TESTUSER")
-                .password("1234")
-                .email("TEST@test.com")
-                .name("테스트").
-                build();
+        User user = TestUserUtil.createTestUser();
 
         // when
         userMapper.save(user);
-        User found = userMapper.findByUsername("TESTUSER");
+        User found = userMapper.findByUsername("TESTER");
 
         // then
         assertThat(found).isNotNull();
-        assertThat(found.getName()).isEqualTo("테스트");
+        assertThat(found.getName()).isEqualTo("테스터");
     }
 }
