@@ -21,4 +21,8 @@ public class UserService {
 
         userMapper.save(user);
     }
+
+    public User getUser(String username){
+        return null;
+    }
 }
